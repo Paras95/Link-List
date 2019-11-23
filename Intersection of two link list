@@ -1,0 +1,75 @@
+#include<iostream>
+#include<bits/stdc++.h>
+#include<stack>
+#include<map>
+#include<set>
+using namespace std;
+
+struct node
+{
+  int data;
+  struct node* next;
+};
+
+void printLinkList(struct node* head)
+{
+  struct node* current=head;
+  while(current)
+  {
+    std::cout<<current->data<<" ";
+    current=current->next;
+  }
+  std::cout<<endl;
+}
+
+struct node* _Interesection(struct node* head1,struct node* head2)
+{
+  if(!head1 || !head2)
+  {
+    return NULL;
+  }
+  if(head1->data < head2->data)
+  {
+    return _Interesection(head1->next,head2);
+  }
+  if(head1->data>head2->data)
+  {
+    return _Interesection(head1,head2->next);
+  }
+  struct node* temp=(struct node*)malloc(sizeof(struct node));
+  temp->data=head1->data;
+  temp->next=_Interesection(head1->next,head2->next);
+  return temp;
+}
+
+void push(struct node** head_ref,int key)
+{
+  struct node* temp=(struct node*)malloc(sizeof(struct node));
+  temp->data=key;
+  temp->next=(*head_ref);
+  (*head_ref)=temp;
+}
+
+int main()
+{
+  struct node* a=NULL;
+  struct node* b=NULL;
+  struct node* intersect=NULL;
+  int n,m;
+  std::cin>>n>>m;
+  int p;
+  for(int i=0;i<n;i++)
+  {
+    std::cin>>p;
+    push(&a,p);
+  }
+  int w;
+  for(int j=0;j<m;j++)
+  {
+    std::cin>>w;
+    push(&b,w);
+  }
+  intersect=_Interesection(a,b);
+  printLinkList(intersect);
+  return 0;
+}
